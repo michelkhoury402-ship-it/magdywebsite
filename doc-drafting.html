@@ -1,0 +1,2354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Doc Drafting Assistant — Arabic.AI Suite</title>
+<meta name="description" content="Tell us what you need. Get a senior-grade Word document back. A smart intake, a short Q&A, and a fully drafted .docx ready to download." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --purple: #3F1993;
+    --purple-deep: #2a0f66;
+    --purple-soft: #ede7f8;
+    --purple-softer: #f5f2fb;
+    --lilac: #C9A4F5;
+    --blush: #F8C8DC;
+    --blush-soft: #fdf0f4;
+    --charcoal: #09090A;
+    --ink: #1a1a1f;
+    --gray-700: #4a4a52;
+    --gray-500: #8a8a92;
+    --gray-400: #b4b4bb;
+    --gray-300: #d6d6dc;
+    --gray-200: #e3e3e8;
+    --gray-100: #eaeaee;
+    --gray-50: #f4f4f6;
+    --cream: #f6f4ef;
+    --cream-2: #efece4;
+    --paper: #ffffff;
+    --cosmic: #0D0521;
+
+    --display: "Big Shoulders Display", Impact, "Arial Black", sans-serif;
+    --sans: "DM Sans", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    --arabic: "Noto Naskh Arabic", "DM Sans", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    --container: 1280px;
+    --radius: 14px;
+    --radius-lg: 22px;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--charcoal);
+    background: var(--cream);
+    line-height: 1.5;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+  img, svg { display: block; max-width: 100%; }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(140%) blur(12px);
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    background: color-mix(in srgb, var(--cream) 78%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--charcoal) 8%, transparent);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .nav-logo svg { height: 22px; width: auto; }
+  .nav-links { display: flex; gap: 26px; font-size: 14px; font-weight: 500; color: var(--ink); }
+  .nav-links a { opacity: 0.75; transition: opacity .2s var(--ease); position: relative; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a.active { opacity: 1; color: var(--purple); }
+  .nav-links a.active::after {
+    content: ""; position: absolute; left: 50%; bottom: -22px;
+    transform: translateX(-50%); width: 4px; height: 4px;
+    background: var(--purple); border-radius: 50%;
+  }
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; letter-spacing: -0.005em;
+    transition: all .25s var(--ease); white-space: nowrap;
+  }
+  .btn-primary { background: var(--charcoal); color: #fff; border: 1px solid var(--charcoal); }
+  .btn-primary:hover { background: var(--purple); border-color: var(--purple); transform: translateY(-1px); }
+  .btn-primary .arrow { transition: transform .25s var(--ease); }
+  .btn-primary:hover .arrow { transform: translateX(3px); }
+  .btn-ghost {
+    background: transparent; color: var(--charcoal);
+    border: 1px solid color-mix(in srgb, var(--charcoal) 18%, transparent);
+  }
+  .btn-ghost:hover { border-color: var(--charcoal); background: color-mix(in srgb, var(--charcoal) 5%, transparent); }
+  .btn-lg { padding: 16px 28px; font-size: 15px; }
+
+  /* ---------- Breadcrumb ---------- */
+  .crumbs {
+    padding-top: 48px;
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gray-500); display: flex; gap: 10px; align-items: center;
+  }
+  .crumbs a { color: var(--gray-500); transition: color .2s var(--ease); }
+  .crumbs a:hover { color: var(--purple); }
+  .crumbs .sep { opacity: 0.5; }
+  .crumbs .current { color: var(--purple); }
+
+  /* ---------- Hero card ---------- */
+  .hero-card {
+    margin-top: 24px; position: relative;
+    background: linear-gradient(135deg, #2a0f66 0%, #4a22a8 50%, #6934c4 100%);
+    color: #fff; border-radius: 28px;
+    padding: 56px 72px; overflow: hidden;
+    box-shadow: 0 40px 80px -40px rgba(63, 25, 147, 0.4);
+  }
+  .hero-card::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 500px 300px at 85% 30%, color-mix(in srgb, var(--lilac) 30%, transparent), transparent 60%),
+      radial-gradient(ellipse 400px 250px at 15% 90%, color-mix(in srgb, var(--blush) 15%, transparent), transparent 55%);
+    pointer-events: none;
+  }
+  .hero-card::after {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 30% 50%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 50%, black 30%, transparent 80%);
+    pointer-events: none;
+  }
+  .hero-card-inner {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 16px; border-radius: 999px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase; color: #fff;
+    margin-bottom: 24px;
+  }
+  .hero-pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lilac); box-shadow: 0 0 12px var(--lilac);
+  }
+  .hero-card h1 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(40px, 5vw, 60px); line-height: 1;
+    letter-spacing: -0.015em; margin: 0 0 20px; color: #fff; max-width: 16ch;
+  }
+  .hero-card p {
+    margin: 0; font-size: 16px; color: rgba(255,255,255,0.78);
+    line-height: 1.6; max-width: 52ch;
+  }
+  .hero-features { display: flex; flex-direction: column; gap: 12px; }
+  .hero-feature {
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .hero-feature h4 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: #fff;
+  }
+  .hero-feature p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.45;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ---------- Widget section ---------- */
+  .widget-section { padding: 72px 0 48px; }
+  .widget-intro { text-align: center; margin-bottom: 36px; }
+  .widget-intro .eyebrow {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 14px;
+  }
+  .widget-intro h2 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(36px, 4.5vw, 60px); line-height: 0.95;
+    letter-spacing: -0.015em; margin: 0 auto 16px;
+    max-width: 22ch; color: var(--charcoal);
+  }
+  .widget-intro p {
+    font-size: 16px; color: var(--gray-700);
+    max-width: 60ch; margin: 0 auto;
+  }
+
+  /* ---------- Stepper (outside card) ---------- */
+  .stepper {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+    background: var(--paper);
+    border: 1px solid var(--gray-100);
+    border-radius: 16px;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    box-shadow: 0 4px 12px rgba(20,10,50,0.04);
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: opacity .3s var(--ease);
+    opacity: 0.4;
+  }
+  .step.current { opacity: 1; }
+  .step.done { opacity: 1; }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.5px solid var(--gray-300);
+    display: grid;
+    place-items: center;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    transition: all .3s var(--ease);
+    flex-shrink: 0;
+  }
+  .step.current .step-num {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+  .step.done .step-num {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+  .step.done .step-num .num { display: none; }
+  .step.done .step-num::after {
+    content: "";
+    width: 10px; height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .step-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+  .step.current .step-label { color: var(--charcoal); }
+  .step-connector {
+    width: 36px;
+    height: 1.5px;
+    background: var(--gray-200);
+  }
+
+  /* ---------- Widget card ---------- */
+  .widget {
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--charcoal) 7%, transparent);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 80px -30px rgba(20, 10, 50, 0.18), 0 2px 8px -2px rgba(20, 10, 50, 0.06);
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 640px;
+  }
+
+  /* Panels shown per step */
+  .step-panel {
+    padding: 40px 48px;
+    display: none;
+  }
+  .widget[data-step="brief"]    .step-panel[data-panel="brief"]    { display: block; }
+  .widget[data-step="qa"]       .step-panel[data-panel="qa"]       { display: block; }
+  .widget[data-step="writing"]  .step-panel[data-panel="writing"]  { display: block; }
+  .widget[data-step="preview"]  .step-panel[data-panel="preview"]  { display: block; }
+
+  /* ---------- STEP 1: Brief ---------- */
+  .step-heading {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--charcoal);
+    margin: 0 0 6px;
+    letter-spacing: -0.005em;
+  }
+  .step-sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0 0 28px;
+  }
+
+  .field-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  /* Document type grid */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .doc-card {
+    background: var(--paper);
+    border: 1.5px solid var(--gray-100);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .3s var(--ease);
+    text-align: left;
+    min-height: 76px;
+  }
+  .doc-card.hover {
+    border-color: var(--gray-300);
+    background: var(--gray-50);
+  }
+  .doc-card.selected {
+    border-color: var(--purple);
+    background: var(--purple-softer);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--purple) 15%, transparent);
+  }
+  .doc-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 3px;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+  .doc-card-sub {
+    font-size: 11.5px;
+    color: var(--gray-500);
+    line-height: 1.3;
+  }
+
+  /* Language & jurisdiction row */
+  .brief-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    margin-bottom: 28px;
+  }
+  .lang-toggle {
+    display: inline-flex;
+    gap: 8px;
+  }
+  .lang-btn {
+    padding: 9px 20px;
+    background: var(--paper);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+    transition: all .3s var(--ease);
+  }
+  .lang-btn.selected {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+  .lang-btn.ar { font-family: var(--arabic); direction: rtl; }
+  .jurisdiction {
+    padding: 12px 16px;
+    background: var(--paper);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--gray-400);
+  }
+
+  /* Template suggestions */
+  .templates-wrap {
+    background: var(--purple-softer);
+    border: 1px solid color-mix(in srgb, var(--purple) 15%, transparent);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .templates-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple);
+  }
+  .templates-head svg { flex-shrink: 0; }
+  .template-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--paper);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all .25s var(--ease);
+  }
+  .template-row:last-child { margin-bottom: 0; }
+  .template-row.hover {
+    border-color: var(--purple);
+    transform: translateX(2px);
+  }
+  .template-row.chosen {
+    border-color: var(--purple);
+    background: color-mix(in srgb, var(--purple) 6%, var(--paper));
+  }
+  .template-num {
+    width: 22px; height: 22px;
+    background: var(--purple);
+    color: #fff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .template-text {
+    flex: 1;
+    font-size: 13.5px;
+    color: var(--charcoal);
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .template-use {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--purple);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .template-use::after {
+    content: " →";
+  }
+
+  /* Brief textarea */
+  .brief-input-wrap {
+    background: var(--paper);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    position: relative;
+    min-height: 110px;
+    transition: border-color .3s var(--ease);
+  }
+  .brief-input-wrap.filled {
+    border-color: var(--purple);
+  }
+  .brief-input {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--charcoal);
+    min-height: 70px;
+    position: relative;
+  }
+  .brief-input.empty {
+    color: var(--gray-400);
+  }
+  .brief-input .caret {
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    background: var(--purple);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+    opacity: 0;
+  }
+  .widget.brief-typing .brief-input .caret { opacity: 1; }
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  .brief-helper {
+    font-size: 12.5px;
+    color: var(--gray-500);
+    margin-bottom: 24px;
+  }
+
+  /* Continue button */
+  .continue-row {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--gray-100);
+    padding-top: 24px;
+  }
+  .continue-btn {
+    padding: 13px 28px;
+    background: var(--purple);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all .3s var(--ease);
+    position: relative;
+  }
+  .continue-btn:disabled,
+  .continue-btn[data-state="disabled"] {
+    background: var(--gray-200);
+    color: var(--gray-500);
+  }
+  .continue-btn.pulse { animation: btnPulse 0.7s var(--ease); }
+  @keyframes btnPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in srgb, var(--purple) 40%, transparent); }
+    40% { transform: scale(0.97); box-shadow: 0 0 0 10px color-mix(in srgb, var(--purple) 0%, transparent); }
+  }
+
+  /* ---------- STEP 2: Smart Q&A ---------- */
+  .qa-intro {
+    margin-bottom: 24px;
+  }
+  .qa-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .qa-card {
+    background: var(--paper);
+    border: 1px solid var(--gray-100);
+    border-radius: 14px;
+    padding: 20px 22px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .4s var(--ease), transform .4s var(--ease), border-color .3s var(--ease);
+  }
+  .qa-card.in {
+    opacity: 1;
+    transform: none;
+  }
+  .qa-card.answered {
+    border-color: color-mix(in srgb, var(--purple) 40%, transparent);
+    background: color-mix(in srgb, var(--purple) 3%, var(--paper));
+  }
+  .qa-card-head {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .qa-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.5px solid var(--purple);
+    color: var(--purple);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all .3s var(--ease);
+  }
+  .qa-card.answered .qa-num {
+    background: var(--purple);
+    color: #fff;
+  }
+  .qa-card.answered .qa-num .n { display: none; }
+  .qa-card.answered .qa-num::after {
+    content: "";
+    width: 9px; height: 5px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .qa-body { flex: 1; }
+  .qa-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .qa-title .req {
+    color: #dc2626;
+    margin-left: 2px;
+  }
+  .qa-question {
+    font-size: 13.5px;
+    color: var(--charcoal);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .qa-why {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .qa-input {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal);
+    min-height: 40px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .qa-input.empty {
+    color: var(--gray-400);
+  }
+  .qa-input .caret {
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    background: var(--purple);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+    opacity: 0;
+  }
+  .qa-card.typing .qa-input .caret { opacity: 1; }
+  .qa-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .qa-suggestion {
+    padding: 6px 12px;
+    background: var(--paper);
+    border: 1px solid var(--gray-200);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all .2s var(--ease);
+  }
+  .qa-suggestion.chosen {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fff;
+  }
+
+  /* ---------- WRITING (loading) ---------- */
+  .writing-panel {
+    padding: 100px 48px;
+    text-align: center;
+  }
+  .writing-spinner {
+    width: 60px; height: 60px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    border: 3px solid var(--purple-soft);
+    border-top-color: var(--purple);
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .writing-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--charcoal);
+    margin: 0 0 8px;
+  }
+  .writing-sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0 0 32px;
+  }
+  .writing-progress {
+    max-width: 280px;
+    margin: 0 auto;
+    height: 3px;
+    background: var(--gray-100);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .writing-progress::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--purple);
+    border-radius: 999px;
+    transform-origin: left;
+    animation: progressFill 2.6s var(--ease) forwards;
+  }
+  @keyframes progressFill {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+  }
+
+  /* ---------- PREVIEW ---------- */
+  .preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 28px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--gray-100);
+    gap: 12px;
+  }
+  .preview-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .meta-chip {
+    padding: 6px 12px;
+    background: var(--purple-softer);
+    color: var(--purple);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-chip svg { flex-shrink: 0; }
+  .meta-chip-light {
+    padding: 6px 12px;
+    background: var(--gray-50);
+    color: var(--charcoal);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .preview-actions { display: flex; gap: 8px; }
+  .preview-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .25s var(--ease);
+  }
+  .preview-btn-ghost {
+    background: var(--paper);
+    color: var(--charcoal);
+    border: 1px solid var(--gray-200);
+  }
+  .preview-btn-ghost:hover { border-color: var(--gray-300); }
+  .preview-btn-primary {
+    background: var(--purple);
+    color: #fff;
+  }
+  .preview-btn-primary:hover { background: var(--purple-deep); }
+
+  /* Word preview bar */
+  .word-preview-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 28px;
+    background: var(--purple-softer);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    font-weight: 600;
+    border-bottom: 1px solid color-mix(in srgb, var(--purple) 10%, transparent);
+  }
+  .word-preview-hint {
+    color: var(--gray-500);
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 400;
+  }
+
+  /* Preview document */
+  .preview-stage {
+    padding: 28px;
+    background: var(--gray-50);
+    max-height: 620px;
+    overflow-y: auto;
+  }
+  .preview-doc {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(20,10,50,0.08);
+    padding: 48px 56px;
+    max-width: 760px;
+    margin: 0 auto;
+    font-family: "Times New Roman", Georgia, serif;
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--charcoal);
+  }
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: var(--purple);
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  .preview-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 4px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--purple);
+    display: inline-block;
+    width: 100%;
+  }
+  .preview-date {
+    text-align: center;
+    font-size: 10px;
+    color: var(--gray-500);
+    margin: 4px 0 28px;
+    font-family: var(--mono);
+  }
+  .preview-section-title {
+    font-weight: 700;
+    font-size: 13px;
+    margin: 0 0 10px;
+    color: var(--charcoal);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .preview-p {
+    margin: 0 0 10px;
+    text-align: justify;
+    color: #2a2a2f;
+    font-size: 11.5px;
+  }
+  .preview-p strong { font-weight: 700; color: var(--charcoal); }
+  .preview-h {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--charcoal);
+    margin: 22px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .preview-clause {
+    margin: 0 0 8px;
+    padding-left: 26px;
+    text-indent: -26px;
+    color: #2a2a2f;
+    font-size: 11.5px;
+    text-align: justify;
+  }
+  .preview-clause .num {
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-right: 6px;
+  }
+
+  /* Staggered reveal for preview sections */
+  .preview-block {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: previewFadeIn 0.45s var(--ease) forwards;
+  }
+  @keyframes previewFadeIn {
+    to { opacity: 1; transform: none; }
+  }
+  .widget[data-step="preview"] .preview-block:nth-child(1) { animation-delay: 0.05s; }
+  .widget[data-step="preview"] .preview-block:nth-child(2) { animation-delay: 0.15s; }
+  .widget[data-step="preview"] .preview-block:nth-child(3) { animation-delay: 0.25s; }
+  .widget[data-step="preview"] .preview-block:nth-child(4) { animation-delay: 0.35s; }
+  .widget[data-step="preview"] .preview-block:nth-child(5) { animation-delay: 0.45s; }
+  .widget[data-step="preview"] .preview-block:nth-child(6) { animation-delay: 0.55s; }
+  .widget[data-step="preview"] .preview-block:nth-child(7) { animation-delay: 0.65s; }
+  .widget[data-step="preview"] .preview-block:nth-child(8) { animation-delay: 0.75s; }
+  .widget[data-step="preview"] .preview-block:nth-child(9) { animation-delay: 0.85s; }
+  .widget[data-step="preview"] .preview-block:nth-child(10) { animation-delay: 0.95s; }
+
+  /* ---------- Section shell ---------- */
+  section.sec { padding: 100px 0; }
+  .section-head {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-bottom: 64px;
+  }
+  .section-index {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    padding-top: 8px;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(36px, 5vw, 68px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    color: var(--charcoal);
+    max-width: 18ch;
+    margin: 0;
+  }
+  .section-intro {
+    margin-top: 20px;
+    font-size: 17px;
+    color: var(--gray-700);
+    max-width: 58ch;
+  }
+
+  /* How it works */
+  .howto {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: color-mix(in srgb, var(--charcoal) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--charcoal) 10%, transparent);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .howto-step {
+    background: var(--paper);
+    padding: 40px 32px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+  }
+  .howto-num {
+    font-family: var(--display);
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 0.8;
+    color: var(--purple);
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+  }
+  .howto-step h3 {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.005em;
+    color: var(--charcoal);
+    line-height: 1;
+  }
+  .howto-step p {
+    font-size: 14.5px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* Doc types library */
+  .docs-library {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .lib-card {
+    background: var(--paper);
+    border: 1px solid var(--gray-100);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all .3s var(--ease);
+  }
+  .lib-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+  }
+  .lib-icon {
+    width: 36px; height: 36px;
+    background: var(--purple-soft);
+    color: var(--purple);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+  }
+  .lib-card h4 {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin: 0 0 4px;
+    color: var(--charcoal);
+  }
+  .lib-card p {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--gray-500);
+    line-height: 1.4;
+  }
+
+  /* Features two-up */
+  .features-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .feature-box {
+    background: var(--paper);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-box.dark {
+    background: var(--cosmic);
+    border-color: var(--cosmic);
+    color: #fff;
+  }
+  .feature-box.dark::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--purple) 50%, transparent), transparent 60%);
+    pointer-events: none;
+  }
+  .feature-inner { position: relative; z-index: 1; }
+  .feature-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .feature-box.dark .feature-eyebrow { color: var(--lilac); }
+  .feature-box h3 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+    margin: 0 0 16px;
+    color: var(--charcoal);
+    max-width: 14ch;
+  }
+  .feature-box.dark h3 { color: #fff; }
+  .feature-box p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--gray-700);
+    margin: 0 0 24px;
+  }
+  .feature-box.dark p { color: rgba(255,255,255,0.72); }
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .feature-list-item {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--charcoal);
+  }
+  .feature-box.dark .feature-list-item { color: rgba(255,255,255,0.85); }
+  .feature-list-item svg {
+    color: var(--purple);
+    margin-top: 4px;
+  }
+  .feature-box.dark .feature-list-item svg { color: var(--lilac); }
+
+  /* Enterprise strip */
+  .enterprise {
+    background: var(--cosmic);
+    color: #fff;
+    border-radius: 28px;
+    margin: 0 32px;
+    padding: 80px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .enterprise::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 90% 20%, color-mix(in srgb, var(--purple) 50%, transparent), transparent 50%),
+      radial-gradient(circle at 10% 80%, color-mix(in srgb, var(--lilac) 15%, transparent), transparent 55%);
+    pointer-events: none;
+  }
+  .enterprise-inner {
+    position: relative; z-index: 1;
+    max-width: var(--container);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .enterprise h2 {
+    font-family: var(--display);
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    margin: 0 0 20px;
+    color: #fff;
+  }
+  .enterprise p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.72);
+    margin: 0;
+    max-width: 44ch;
+  }
+  .enterprise-pills {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .ent-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 18px 20px;
+    backdrop-filter: blur(8px);
+  }
+  .ent-pill h4 {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ent-pill h4 svg { color: var(--lilac); }
+  .ent-pill p {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* Sisters */
+  .sisters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .sister {
+    background: var(--paper);
+    border: 1px solid var(--gray-100);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all .3s var(--ease);
+    display: block;
+  }
+  .sister:hover {
+    border-color: var(--charcoal);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -20px rgba(20,10,50,0.2);
+  }
+  .sister-icon {
+    width: 44px; height: 44px;
+    background: var(--purple);
+    color: #fff;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+  }
+  .sister h4 {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    color: var(--charcoal);
+    letter-spacing: -0.005em;
+  }
+  .sister p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+  .sister-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    transition: color .2s var(--ease), gap .2s var(--ease);
+  }
+  .sister:hover .sister-link { color: var(--purple); gap: 12px; }
+
+  /* CTA */
+  .cta {
+    background: var(--cosmic);
+    color: #fff;
+    border-radius: 28px;
+    margin: 0 32px 80px;
+    padding: 80px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 20%, color-mix(in srgb, var(--purple) 55%, transparent), transparent 60%),
+      radial-gradient(ellipse 500px 300px at 90% 80%, color-mix(in srgb, var(--blush) 25%, transparent), transparent 55%);
+    pointer-events: none;
+  }
+  .cta-inner {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    align-items: end;
+    max-width: var(--container);
+    margin: 0 auto;
+  }
+  .cta h2 {
+    font-family: var(--display);
+    font-size: clamp(44px, 5.5vw, 80px);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0;
+    max-width: 14ch;
+  }
+  .cta h2 span { color: var(--lilac); }
+  .cta-body {
+    font-size: 16px;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.55;
+    margin: 0 0 28px;
+  }
+  .cta-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-light { background: #fff; color: var(--charcoal); border: 1px solid #fff; }
+  .btn-light:hover { background: var(--blush); border-color: var(--blush); transform: translateY(-1px); }
+  .btn-outline-light {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .btn-outline-light:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+  /* Footer */
+  footer { padding: 80px 0 48px; border-top: 1px solid var(--gray-100); background: var(--cream); }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 72px;
+  }
+  .footer-brand svg { height: 26px; margin-bottom: 20px; }
+  .footer-brand p { font-size: 14px; color: var(--gray-700); max-width: 34ch; line-height: 1.55; margin: 0; }
+  .footer-col h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin: 0 0 20px;
+    font-weight: 500;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+    transition: color .2s var(--ease);
+  }
+  .footer-col a:hover { color: var(--purple); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--gray-100);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+
+  /* Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-card { padding: 48px 40px; }
+    .hero-card-inner { grid-template-columns: 1fr; gap: 40px; }
+    .howto { grid-template-columns: 1fr; }
+    .docs-library { grid-template-columns: repeat(2, 1fr); }
+    .features-two { grid-template-columns: 1fr; }
+    .enterprise { padding: 56px 40px; margin: 0 16px; }
+    .enterprise-inner { grid-template-columns: 1fr; gap: 40px; }
+    .sisters { grid-template-columns: 1fr; }
+    .cta { padding: 56px 40px; margin: 0 16px 48px; }
+    .cta-inner { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 16px; }
+    .doc-grid { grid-template-columns: repeat(3, 1fr); }
+    .brief-row { grid-template-columns: 1fr; gap: 24px; }
+    .step-panel { padding: 32px 28px; }
+  }
+  @media (max-width: 720px) {
+    .container { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-card { padding: 36px 24px; border-radius: 20px; }
+    section.sec { padding: 64px 0; }
+    .stepper { padding: 14px 16px; gap: 10px; }
+    .step-connector { width: 16px; }
+    .step-label { display: none; }
+    .doc-grid { grid-template-columns: repeat(2, 1fr); }
+    .docs-library { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .footer-brand { grid-column: 1 / -1; }
+    .preview-doc { padding: 24px 28px; font-size: 10.5px; }
+    .preview-title { font-size: 18px; }
+    .preview-stage { padding: 14px; }
+    .preview-toolbar { flex-wrap: wrap; padding: 14px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Arabic.AI">
+      <svg viewBox="0 0 323.09 57.94" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <path fill="#09090a" d="M54.26,56.73h10.07v-24.93c0-5.48,4.44-9.91,9.91-9.91h6.63v-9.35h-10.07c-9.13,0-16.54,7.4-16.54,16.54v27.65Z"/>
+          <rect fill="#09090a" x="188.87" y="12.55" width="10.07" height="44.11"/>
+          <path fill="#09090a" d="M226.89,20.46c4.48,0,8.15,1.76,10.63,4.55l6.47-6.63c-4.23-4.47-10.39-7.35-17.1-7.35-13.02,0-23.57,10.47-23.57,23.41s10.55,23.49,23.57,23.49c6.47,0,12.31-2.56,16.54-6.87l-6.47-6.55c-2.48,2.48-5.83,4-10.07,4-7.51,0-13.5-6.07-13.5-14.06s5.99-13.98,13.5-13.98Z"/>
+          <path fill="#09090a" d="M119.8,15.27c-3.65-2.54-8.06-4.07-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14,0-.2.01-.13,0-.25-.01-.38-.01-13.02,0-23.57,10.47-23.57,23.41s10.19,23.1,22.9,23.46c.22,0,.44.03.66.03.07,0,.14,0,.2-.01.13,0,.25.01.38.01,5.03,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07v2.72ZM115.81,44.53l-.02-.03c-2.42,2.42-5.68,3.91-9.76,3.98-3.78-.06-6.97-1.38-9.34-3.52-.02-.02-.05-.05-.07-.07-.26-.24-.51-.5-.75-.76-2.26-2.49-3.65-5.87-3.65-9.7s1.52-7.5,3.99-10.01l.02.03c2.42-2.42,5.68-3.91,9.76-3.98,3.78.06,6.97,1.38,9.34,3.52.02.02.05.04.07.07.26.24.51.5.75.77,2.26,2.49,3.65,5.87,3.65,9.7s-1.52,7.5-3.99,10.01Z"/>
+          <path fill="#09090a" d="M296.14,15.27c-3.65-2.54-8.06-4.07-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14,0-.2.01-.13,0-.25-.01-.38-.01-13.02,0-23.57,10.47-23.57,23.41s10.19,23.1,22.9,23.46c.22,0,.44.03.66.03.07,0,.14,0,.2-.01.13,0,.25.01.38.01,5.03,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07v2.72ZM292.15,44.53l-.02-.03c-2.42,2.42-5.68,3.91-9.76,3.98-3.78-.06-6.97-1.38-9.34-3.52-.02-.02-.05-.05-.07-.07-.26-.24-.51-.5-.75-.76-2.26-2.49-3.65-5.87-3.65-9.7s1.52-7.5,3.99-10.01l.02.03c2.42-2.42,5.68-3.91,9.76-3.98,3.78.06,6.97,1.38,9.34,3.52.02.02.05.04.07.07.26.24.51.5.75.77,2.26,2.49,3.65,5.87,3.65,9.7s-1.52,7.5-3.99,10.01Z"/>
+          <path fill="#09090a" d="M160.55,11.03c-.13,0-.25,0-.38.01-.07,0-.14-.01-.2-.01-.22,0-.44.03-.66.03-4.77.13-9.18,1.67-12.83,4.2V.04h-10.07v56.62h10.07v-2.95c3.83,2.66,8.48,4.23,13.5,4.23.13,0,.25,0,.38-.01.07,0,.14.01.2.01.22,0,.44-.03.66-.03,12.71-.36,22.9-10.66,22.9-23.46s-10.55-23.41-23.57-23.41ZM170.41,44.14c-.24.26-.49.52-.75.76-.02.02-.05.05-.07.07-2.36,2.14-5.56,3.46-9.34,3.52-4.09-.07-7.35-1.57-9.76-3.98l-.02.03c-2.47-2.51-3.99-6.03-3.99-10.01s1.39-7.21,3.65-9.7c.24-.26.49-.52.75-.77.02-.02.05-.04.07-.07,2.36-2.14,5.56-3.46,9.34-3.52,4.09.07,7.35,1.57,9.76,3.98l.02-.03c2.47,2.51,3.99,6.03,3.99,10.01s-1.39,7.21-3.65,9.7Z"/>
+          <path fill="#09090a" d="M193.9,10.04c2.77,0,4.99-2.28,4.99-5.06s-2.22-4.99-4.99-4.99-5.06,2.22-5.06,4.99,2.29,5.06,5.06,5.06Z"/>
+          <rect fill="#09090a" x="313.02" y="12.55" width="10.07" height="44.11"/>
+          <path fill="#09090a" d="M318.05,10.04c2.77,0,4.99-2.28,4.99-5.06s-2.22-4.99-4.99-4.99-5.06,2.22-5.06,4.99,2.29,5.06,5.06,5.06Z"/>
+          <path fill="#09090a" d="M248.17,51.68c0-2.77,2.29-4.99,5.06-4.99s4.99,2.22,4.99,4.99-2.22,5.06-4.99,5.06-5.06-2.28-5.06-5.06Z"/>
+          <path fill="#3f1993" d="M37.66,12.55v2.72c-3.66-2.53-8.07-4.06-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14.01-.2.01-.14-.01-.26-.01-.38-.01C10.55,11.03,0,21.5,0,34.44s10.18,23.1,22.9,23.46c.23,0,.44.03.67.03.07,0,.14-.01.2-.01.12,0,.25.01.38.01,5.02,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07ZM32.26,23.23c.32.24.63.49.93.76l.07.07c.26.25.51.5.76.77,1.92,2.13,3.23,4.9,3.55,8.06-6.63-.22-11.97-5.6-12.12-12.26,1.39.14,2.73.46,3.96,1,.66.27,1.27.58,1.84.93.35.2.68.43,1.01.68ZM14.07,24.43l.02.02c.72-.72,1.51-1.36,2.38-1.9.23-.14.46-.27.7-.4.68-.37,1.42-.67,2.19-.92.93-.3,1.9-.51,2.91-.61-.14,6.65-5.49,12.05-12.12,12.26.34-3.35,1.77-6.28,3.92-8.45ZM18.68,47.51l-.58-.24c-.58-.26-1.13-.54-1.64-.86-.69-.43-1.32-.91-1.92-1.45l-.07-.07c-.27-.24-.52-.5-.76-.76-1.94-2.13-3.23-4.92-3.55-8.08,6.65.2,11.99,5.64,12.12,12.32-1.28-.15-2.49-.44-3.6-.87ZM33.67,44.54l-.02-.03c-.91.91-1.94,1.69-3.08,2.31-.29.16-.6.3-.91.45-.29.13-.59.25-.89.37-1.03.37-2.14.63-3.32.76.1-6.69,5.47-12.12,12.13-12.32-.34,3.35-1.78,6.29-3.92,8.48Z"/>
+        </g>
+      </svg>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#suite">The Suite</a>
+      <a href="index.html#assistants" class="active">Assistants</a>
+      <a href="translate.html">Translate</a>
+      <a href="ocr.html">OCR</a>
+      <a href="speech.html">Speech</a>
+      <a href="index.html#engine">Engine</a>
+      <a href="index.html#deploy">Deployment</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#cta" class="btn btn-primary">
+        Book a demo
+        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<div class="container">
+  <div class="crumbs">
+    <a href="index.html">Arabic.AI Suite</a>
+    <span class="sep">/</span>
+    <a href="index.html#assistants">Assistants</a>
+    <span class="sep">/</span>
+    <span class="current">Doc Drafting</span>
+  </div>
+
+  <div class="hero-card">
+    <div class="hero-card-inner">
+      <div>
+        <span class="hero-pill">
+          <span class="dot"></span>
+          Doc Drafting Assistant
+        </span>
+        <h1>Tell us what you need. Get a senior-grade Word document back.</h1>
+        <p>We don't take a one-line brief and guess. The assistant interviews you the way a senior practitioner would, then drafts a fully structured, properly styled document, ready to download as a Word file.</p>
+      </div>
+      <div class="hero-features">
+        <div class="hero-feature">
+          <h4>Smart intake</h4>
+          <p>AI asks the right questions before drafting.</p>
+        </div>
+        <div class="hero-feature">
+          <h4>Senior-grade output</h4>
+          <p>Full clauses, proper structure, no &ldquo;TODO&rdquo; placeholders.</p>
+        </div>
+        <div class="hero-feature">
+          <h4>Real Word file</h4>
+          <p>Styled .docx with headings, tables, signatures.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ANIMATED WIDGET ===================== -->
+<section class="widget-section">
+  <div class="container">
+    <div class="widget-intro reveal">
+      <div class="eyebrow">&mdash; Live preview &mdash;</div>
+      <h2>Three steps. One Word document.</h2>
+      <p>Watch it draft a full UAE employment contract &mdash; from a rough brief to a .docx you could send a candidate.</p>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper reveal" id="stepper">
+      <div class="step" data-step-id="brief">
+        <div class="step-num"><span class="num">1</span></div>
+        <div class="step-label">Brief</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" data-step-id="qa">
+        <div class="step-num"><span class="num">2</span></div>
+        <div class="step-label">Smart Q&amp;A</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" data-step-id="preview">
+        <div class="step-num"><span class="num">3</span></div>
+        <div class="step-label">Word Preview</div>
+      </div>
+    </div>
+
+    <!-- Widget -->
+    <div class="widget reveal" id="widget" data-step="brief">
+
+      <!-- ===== STEP 1: Brief ===== -->
+      <div class="step-panel" data-panel="brief">
+        <h3 class="step-heading">1. What are we drafting?</h3>
+        <p class="step-sub">Pick a document type, tell us what you need, and we'll come back with the questions a senior practitioner would ask first.</p>
+
+        <div class="field-label">Document type</div>
+        <div class="doc-grid" id="docGrid">
+          <button class="doc-card" data-doc="nda">
+            <div class="doc-card-title">NDA</div>
+            <div class="doc-card-sub">Mutual or one-way confidentiality</div>
+          </button>
+          <button class="doc-card" data-doc="service">
+            <div class="doc-card-title">Service Agreement</div>
+            <div class="doc-card-sub">Vendor / consulting</div>
+          </button>
+          <button class="doc-card" data-doc="employment">
+            <div class="doc-card-title">Employment Contract</div>
+            <div class="doc-card-sub">Full-time hire</div>
+          </button>
+          <button class="doc-card" data-doc="offer">
+            <div class="doc-card-title">Offer Letter</div>
+            <div class="doc-card-sub">Conditional offer</div>
+          </button>
+          <button class="doc-card" data-doc="mou">
+            <div class="doc-card-title">MoU</div>
+            <div class="doc-card-sub">Memorandum of Understanding</div>
+          </button>
+          <button class="doc-card" data-doc="demand">
+            <div class="doc-card-title">Demand Letter</div>
+            <div class="doc-card-sub">Pre-litigation notice</div>
+          </button>
+          <button class="doc-card" data-doc="poa">
+            <div class="doc-card-title">Power of Attorney</div>
+            <div class="doc-card-sub">Special or general</div>
+          </button>
+          <button class="doc-card" data-doc="board">
+            <div class="doc-card-title">Board Resolution</div>
+            <div class="doc-card-sub">Corporate decision</div>
+          </button>
+          <button class="doc-card" data-doc="privacy">
+            <div class="doc-card-title">Privacy Policy</div>
+            <div class="doc-card-sub">Public-facing</div>
+          </button>
+          <button class="doc-card" data-doc="tos">
+            <div class="doc-card-title">Terms of Service</div>
+            <div class="doc-card-sub">Public-facing</div>
+          </button>
+          <button class="doc-card" data-doc="proposal">
+            <div class="doc-card-title">Project Proposal</div>
+            <div class="doc-card-sub">Sales / SoW style</div>
+          </button>
+          <button class="doc-card" data-doc="policy">
+            <div class="doc-card-title">Internal Policy</div>
+            <div class="doc-card-sub">HR / compliance</div>
+          </button>
+        </div>
+
+        <div class="brief-row">
+          <div>
+            <div class="field-label">Output language</div>
+            <div class="lang-toggle" id="langToggle">
+              <button class="lang-btn" data-lang="en">English</button>
+              <button class="lang-btn ar" data-lang="ar">العربية</button>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Jurisdiction (optional)</div>
+            <div class="jurisdiction">e.g. UAE, DIFC, Saudi Arabia, England &amp; Wales</div>
+          </div>
+        </div>
+
+        <div class="field-label">Briefly describe what you need</div>
+
+        <div class="templates-wrap" id="templatesWrap">
+          <div class="templates-head">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            Not sure what to write? Try a template:
+          </div>
+          <div class="template-row" data-template="1">
+            <div class="template-num">1</div>
+            <div class="template-text">Full-time employment contract for a Senior Software Engineer at Acme Fintech LLC (Dubai). Monthly salary AED 32,000 + housing 6,000 + transport 1,500…</div>
+            <div class="template-use">USE</div>
+          </div>
+          <div class="template-row" data-template="2">
+            <div class="template-num">2</div>
+            <div class="template-text">Part-time contractor agreement for a marketing consultant at Northwind Trading LLC (Abu Dhabi), 20 hrs/week for 6 months, AED 12,000/mo retainer…</div>
+            <div class="template-use">USE</div>
+          </div>
+        </div>
+
+        <div class="brief-input-wrap" id="briefInputWrap">
+          <div class="brief-input empty" id="briefInput" data-placeholder="e.g. A 12-month service agreement between Acme LLC (UAE) and a freelance designer for monthly retainer of AED 8,000, with strict confidentiality and IP assignment of all deliverables."></div>
+        </div>
+        <p class="brief-helper">The more concrete details you give now, the sharper the clarifying questions will be in the next step.</p>
+
+        <div class="continue-row">
+          <button class="continue-btn" id="continueBrief" data-state="disabled">
+            Continue
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: Smart Q&A ===== -->
+      <div class="step-panel" data-panel="qa">
+        <div class="qa-intro">
+          <h3 class="step-heading">2. A few quick questions</h3>
+          <p class="step-sub">The assistant pulled these out of your brief. Answer what you can &mdash; the more detail, the more polished the final document.</p>
+        </div>
+
+        <div class="qa-list" id="qaList">
+          <!-- Question 1: Parties -->
+          <div class="qa-card" data-qa="1">
+            <div class="qa-card-head">
+              <div class="qa-num"><span class="n">1</span></div>
+              <div class="qa-body">
+                <div class="qa-title">Parties <span class="req">*</span></div>
+                <div class="qa-question">Please provide the full legal name and trade license number of the employer entity (Acme Fintech LLC) and the full name and passport details of the employee.</div>
+                <div class="qa-why">Why: Ensures accurate identification of contracting parties for legal enforceability.</div>
+                <div class="qa-input empty" data-placeholder="e.g., Acme Fintech LLC, License No: 123456, Dubai; Employee: John Doe, Passport: US123456"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 2: Governing Law -->
+          <div class="qa-card" data-qa="2">
+            <div class="qa-card-head">
+              <div class="qa-num"><span class="n">2</span></div>
+              <div class="qa-body">
+                <div class="qa-title">Governing Law <span class="req">*</span></div>
+                <div class="qa-question">Should the contract be governed exclusively by UAE Labour Law, or are there any additional regulatory frameworks (e.g., DIFC Employment Law) applicable based on the company's free zone status?</div>
+                <div class="qa-why">Why: Determines which statutory rights and termination rules apply.</div>
+                <div class="qa-input empty" data-placeholder="e.g., UAE Labour Law (Mainland) or DIFC Employment Law"></div>
+                <div class="qa-suggestions">
+                  <div class="qa-suggestion" data-val="uae">UAE Labour Law</div>
+                  <div class="qa-suggestion" data-val="difc">DIFC Employment Law</div>
+                  <div class="qa-suggestion" data-val="adgm">ADGM Employment Regulations</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 3: Probation -->
+          <div class="qa-card" data-qa="3">
+            <div class="qa-card-head">
+              <div class="qa-num"><span class="n">3</span></div>
+              <div class="qa-body">
+                <div class="qa-title">Probation <span class="req">*</span></div>
+                <div class="qa-question">Are there specific performance criteria or a formal review process required to confirm employment after the 6-month probation period?</div>
+                <div class="qa-why">Why: Affects drafting of probation clause and conditions for extension or termination.</div>
+                <div class="qa-input empty" data-placeholder="e.g., Yes, with mid-probation review; or No, automatic confirmation"></div>
+                <div class="qa-suggestions">
+                  <div class="qa-suggestion" data-val="review">Formal review at 3 months</div>
+                  <div class="qa-suggestion" data-val="kpi">KPI-based assessment</div>
+                  <div class="qa-suggestion" data-val="auto">No criteria, automatic confirmation</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 4: Non-Compete -->
+          <div class="qa-card" data-qa="4">
+            <div class="qa-card-head">
+              <div class="qa-num"><span class="n">4</span></div>
+              <div class="qa-body">
+                <div class="qa-title">Non-Compete <span class="req">*</span></div>
+                <div class="qa-question">Should the 12-month non-compete apply to all fintech companies in the UAE, or only to direct competitors of Acme Fintech as defined by specific services or clients?</div>
+                <div class="qa-why">Why: Impacts enforceability and specificity required in restraint clause.</div>
+                <div class="qa-input empty" data-placeholder="e.g., All fintech firms in UAE; or Only companies offering payment gateway services with >5% market share"></div>
+                <div class="qa-suggestions">
+                  <div class="qa-suggestion" data-val="all">All fintech companies in UAE</div>
+                  <div class="qa-suggestion" data-val="direct">Direct competitors only</div>
+                  <div class="qa-suggestion" data-val="custom">Defined by customer list or technology</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="continue-row">
+          <button class="continue-btn" id="continueQA" data-state="disabled">
+            Generate draft
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== WRITING ===== -->
+      <div class="step-panel" data-panel="writing">
+        <div class="writing-panel">
+          <div class="writing-spinner"></div>
+          <h3 class="writing-title">Writing your document</h3>
+          <p class="writing-sub">Outlining the Employment Contract…</p>
+          <div class="writing-progress"></div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 3: Preview ===== -->
+      <div class="step-panel" data-panel="preview">
+        <div class="preview-toolbar">
+          <div class="preview-meta">
+            <div class="meta-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              Employment Contract
+            </div>
+            <div class="meta-chip-light">English</div>
+            <div class="meta-chip-light">31 sections</div>
+          </div>
+          <div class="preview-actions">
+            <button class="preview-btn preview-btn-ghost">Edit answers</button>
+            <button class="preview-btn preview-btn-ghost">New document</button>
+            <button class="preview-btn preview-btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download .docx
+            </button>
+          </div>
+        </div>
+        <div class="word-preview-bar">
+          <span>Word Preview</span>
+          <span class="word-preview-hint">Exactly what you'll get when you open the .docx in Word.</span>
+        </div>
+        <div class="preview-stage">
+          <div class="preview-doc">
+            <div class="preview-header preview-block">
+              <span>Arabic.AI</span>
+              <span>Employment Contract</span>
+            </div>
+            <div class="preview-block">
+              <h1 class="preview-title">Employment Contract</h1>
+              <div class="preview-date">YYYY-MM-DD</div>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-section-title">Employment Contract</h2>
+              <p class="preview-p">This Employment Contract ("Contract") is made and entered into on [INSERT: Date of Execution], by and between:</p>
+              <p class="preview-p">Acme Fintech LLC, a company duly registered under the laws of the United Arab Emirates, with trade license number [INSERT: Trade License Number], having its principal place of business in Dubai, United Arab Emirates (hereinafter referred to as the "Employer");</p>
+              <p class="preview-p">AND</p>
+              <p class="preview-p">[INSERT: Full Name of Employee], holder of passport number [INSERT: Passport Number], residing at [INSERT: Employee Address] (hereinafter referred to as the "Employee").</p>
+              <p class="preview-p">Collectively referred to as the "Parties" and individually as a "Party".</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">1. Position and Duties</h2>
+              <p class="preview-clause"><span class="num">1.1</span>The Employer hereby employs the Employee, and the Employee hereby accepts employment, as a Senior Software Engineer.</p>
+              <p class="preview-clause"><span class="num">1.2</span>The Employee shall perform such duties and responsibilities as are normally associated with the position and as may be assigned from time to time by the Employer's management, including but not limited to software development, system architecture design, code reviews, and collaboration with cross-functional teams.</p>
+              <p class="preview-clause"><span class="num">1.3</span>The Employee shall devote their full professional time, skill, and attention to the performance of duties and shall act in the best interests of the Employer at all times.</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">2. Term of Employment</h2>
+              <p class="preview-clause"><span class="num">2.1</span>This Contract shall commence on [INSERT: Start Date] and shall continue unless terminated in accordance with the provisions herein.</p>
+              <p class="preview-clause"><span class="num">2.2</span>The initial period of employment shall include a probationary period of six (6) months, during which either Party may terminate this Contract by providing thirty (30) days' written notice.</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">3. Probation Period and Review</h2>
+              <p class="preview-clause"><span class="num">3.1</span>During the probation period, the Employee's performance will be subject to formal review at the end of the third month.</p>
+              <p class="preview-clause"><span class="num">3.2</span>Based on the outcome of the review, the Employer shall determine whether the Employee's services will be confirmed for permanent employment.</p>
+              <p class="preview-clause"><span class="num">3.3</span>Confirmation of employment after probation does not alter the at-will nature of the employment relationship, subject to applicable notice requirements.</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">4. Compensation and Benefits</h2>
+              <p class="preview-clause"><span class="num">4.1</span>The Employee shall receive a monthly gross salary of AED 32,000 (Thirty-Two Thousand UAE Dirhams), payable in arrears on or before the fifth (5th) day of each succeeding month via bank transfer.</p>
+              <p class="preview-clause"><span class="num">4.2</span>In addition, the Employer shall provide a housing allowance of AED 6,000 per month and a transport allowance of AED 1,500 per month.</p>
+              <p class="preview-clause"><span class="num">4.3</span>The Employee shall be entitled to thirty (30) calendar days of paid annual leave per year of continuous service, accruing pro rata.</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">5. Non-Compete and Confidentiality</h2>
+              <p class="preview-clause"><span class="num">5.1</span>For a period of twelve (12) months following termination of employment, the Employee shall not, within the United Arab Emirates, directly or indirectly engage in any fintech business which competes with the Employer.</p>
+              <p class="preview-clause"><span class="num">5.2</span>The Employee agrees to maintain strict confidentiality of all proprietary information, trade secrets, and business strategies of the Employer, both during and after the term of employment.</p>
+            </div>
+            <div class="preview-block">
+              <h2 class="preview-h">6. End of Service Benefits</h2>
+              <p class="preview-clause"><span class="num">6.1</span>Upon termination of employment, the Employee shall be entitled to end-of-service gratuity calculated in accordance with the UAE Labour Law, based on basic salary and years of continuous service.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="sec">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-index">/ 01 &mdash; How it works</div>
+      <div>
+        <h2 class="section-title">Three steps. Not a blank page.</h2>
+        <p class="section-intro">Most AI drafting tools hand you one field and hope for the best. Ours does the thing a junior associate does before they start writing: asks the right questions first.</p>
+      </div>
+    </div>
+
+    <div class="howto reveal">
+      <div class="howto-step">
+        <div class="howto-num">01</div>
+        <h3>Brief.</h3>
+        <p>Pick the document type, set the language and jurisdiction, and describe what you need in plain English or Arabic. Start from a template if you're not sure.</p>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">02</div>
+        <h3>Smart Q&amp;A.</h3>
+        <p>The assistant reads your brief and fires back the three to seven questions that would actually make the document enforceable &mdash; each with the reasoning behind it.</p>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">03</div>
+        <h3>Word preview.</h3>
+        <p>Get a fully drafted, properly structured Word document with clauses, headings, and signature blocks. Download the .docx and ship it &mdash; no reformatting needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DOC TYPES LIBRARY ===================== -->
+<section class="sec" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-index">/ 02 &mdash; Document library</div>
+      <div>
+        <h2 class="section-title">Every document your business puts on paper.</h2>
+      </div>
+    </div>
+
+    <div class="docs-library reveal">
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        </div>
+        <h4>NDA</h4>
+        <p>Mutual or one-way confidentiality.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+        </div>
+        <h4>Service Agreement</h4>
+        <p>Vendor, consulting, freelance.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h4>Employment Contract</h4>
+        <p>Full-time, probation, termination.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg>
+        </div>
+        <h4>Offer Letter</h4>
+        <p>Conditional offer with all terms.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <h4>MoU</h4>
+        <p>Memorandum of Understanding.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h4>Demand Letter</h4>
+        <p>Pre-litigation notice with citations.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6"/></svg>
+        </div>
+        <h4>Power of Attorney</h4>
+        <p>Special or general, in any jurisdiction.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+        </div>
+        <h4>Board Resolution</h4>
+        <p>Corporate decision, properly minuted.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h4>Privacy Policy</h4>
+        <p>Public-facing, GDPR-aware.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h4>Terms of Service</h4>
+        <p>Public-facing, enforceable.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        </div>
+        <h4>Project Proposal</h4>
+        <p>Sales pitch or Statement of Work.</p>
+      </div>
+      <div class="lib-card">
+        <div class="lib-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+        </div>
+        <h4>Internal Policy</h4>
+        <p>HR, compliance, code of conduct.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FEATURES TWO-UP ===================== -->
+<section class="sec" style="padding-top: 0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-index">/ 03 &mdash; What makes it different</div>
+      <div>
+        <h2 class="section-title">Not a template. An interview.</h2>
+        <p class="section-intro">Templates fail because every deal is different. Blank-page LLMs fail because they skip the diligence. Our assistant does what a senior drafter does: ask first, then draft.</p>
+      </div>
+    </div>
+
+    <div class="features-two reveal">
+      <div class="feature-box dark">
+        <div class="feature-inner">
+          <div class="feature-eyebrow">Senior-grade intake</div>
+          <h3>Questions a junior would miss.</h3>
+          <p>The assistant reads your brief the way a senior practitioner would and surfaces the gaps that matter &mdash; governing law, enforceability risks, edge cases, missing parties.</p>
+          <div class="feature-list">
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Each question comes with the "why" behind it</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Suggested answers so you can click, not type</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Jurisdiction-aware &mdash; UAE, KSA, DIFC, ADGM, England &amp; Wales</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Skip what doesn't apply &mdash; the draft handles defaults</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-box">
+        <div class="feature-inner">
+          <div class="feature-eyebrow">Ship-ready .docx</div>
+          <h3>A Word file you could send a counterparty.</h3>
+          <p>Not Markdown, not plain text, not a ChatGPT wall. A properly styled .docx with headings, numbered clauses, tables, and signature blocks. Open it in Word and send it.</p>
+          <div class="feature-list">
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Native Word styles: heading hierarchy, justified body</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>English and Arabic with proper RTL layout</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Missing info flagged as [INSERT: X] &mdash; no silent guesses</span>
+            </div>
+            <div class="feature-list-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Edit your answers and regenerate anytime</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ENTERPRISE ===================== -->
+<div class="enterprise">
+  <div class="enterprise-inner">
+    <div>
+      <h2>Enterprise-grade <span style="color:var(--lilac)">by default.</span></h2>
+      <p>Drafts never leave your perimeter. No retention, no training on your briefs, no data stored. Every session auditable, every clause traceable.</p>
+    </div>
+    <div class="enterprise-pills">
+      <div class="ent-pill">
+        <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Zero retention</h4>
+        <p>Briefs and drafts deleted post-session by default.</p>
+      </div>
+      <div class="ent-pill">
+        <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>In-region hosting</h4>
+        <p>UAE, KSA, your own VPC, or fully on-prem.</p>
+      </div>
+      <div class="ent-pill">
+        <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Traceable drafts</h4>
+        <p>Every clause linked to the answer that produced it.</p>
+      </div>
+      <div class="ent-pill">
+        <h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Audit logs</h4>
+        <p>Every draft, edit, and download logged for review.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SISTERS ===================== -->
+<section class="sec">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-index">/ 04 &mdash; More in the suite</div>
+      <div>
+        <h2 class="section-title">Three more surfaces, one Arabic brain.</h2>
+        <p class="section-intro">Doc Drafting is one of eight assistants in the suite. The other surfaces cover language, speech, and scanned documents.</p>
+      </div>
+    </div>
+
+    <div class="sisters reveal">
+      <a href="translate.html" class="sister">
+        <div class="sister-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5h7M8 3v2c0 4.5-2 7-5 9"/>
+            <path d="M5 9c1 2.5 5 6 8 7"/>
+            <path d="M13 21l4-10 4 10M14.5 17h5"/>
+          </svg>
+        </div>
+        <h4>Translate</h4>
+        <p>Pro-grade neural translation for documents and text across 100+ language pairs.</p>
+        <span class="sister-link">Explore Translate <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+      </a>
+      <a href="ocr.html" class="sister">
+        <div class="sister-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7V5a2 2 0 0 1 2-2h2M16 3h2a2 2 0 0 1 2 2v2M20 17v2a2 2 0 0 1-2 2h-2M8 21H6a2 2 0 0 1-2-2v-2"/>
+            <path d="M8 12h8M8 9h5M8 15h6"/>
+          </svg>
+        </div>
+        <h4>OCR</h4>
+        <p>High-accuracy Arabic OCR for scans, IDs, tender dossiers, and handwriting.</p>
+        <span class="sister-link">Explore OCR <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+      </a>
+      <a href="speech.html" class="sister">
+        <div class="sister-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/>
+          </svg>
+        </div>
+        <h4>Speech</h4>
+        <p>Speaker-aware Arabic speech-to-text across 22 dialects. Natural text-to-speech for callbots.</p>
+        <span class="sister-link">Explore Speech <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section id="cta" style="padding: 40px 0 0;">
+  <div class="cta">
+    <div class="cta-inner">
+      <div>
+        <div class="section-index" style="color: var(--lilac); margin-bottom: 20px;">/ Get started</div>
+        <h2>Draft your first <span>document in minutes.</span></h2>
+      </div>
+      <div>
+        <p class="cta-body">Try Doc Drafting on suite.arabic.ai &mdash; or book a 30-minute walkthrough and we'll draft one of your own documents live on the call.</p>
+        <div class="cta-ctas">
+          <a href="https://suite.arabic.ai/assistants" target="_blank" rel="noopener" class="btn btn-light btn-lg">
+            Try it free
+            <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="mailto:Contact.us@arabic.ai" class="btn btn-outline-light btn-lg">Book a demo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg viewBox="0 0 323.09 57.94" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <path fill="#09090a" d="M54.26,56.73h10.07v-24.93c0-5.48,4.44-9.91,9.91-9.91h6.63v-9.35h-10.07c-9.13,0-16.54,7.4-16.54,16.54v27.65Z"/>
+            <rect fill="#09090a" x="188.87" y="12.55" width="10.07" height="44.11"/>
+            <path fill="#09090a" d="M226.89,20.46c4.48,0,8.15,1.76,10.63,4.55l6.47-6.63c-4.23-4.47-10.39-7.35-17.1-7.35-13.02,0-23.57,10.47-23.57,23.41s10.55,23.49,23.57,23.49c6.47,0,12.31-2.56,16.54-6.87l-6.47-6.55c-2.48,2.48-5.83,4-10.07,4-7.51,0-13.5-6.07-13.5-14.06s5.99-13.98,13.5-13.98Z"/>
+            <path fill="#09090a" d="M119.8,15.27c-3.65-2.54-8.06-4.07-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14,0-.2.01-.13,0-.25-.01-.38-.01-13.02,0-23.57,10.47-23.57,23.41s10.19,23.1,22.9,23.46c.22,0,.44.03.66.03.07,0,.14,0,.2-.01.13,0,.25.01.38.01,5.03,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07v2.72ZM115.81,44.53l-.02-.03c-2.42,2.42-5.68,3.91-9.76,3.98-3.78-.06-6.97-1.38-9.34-3.52-.02-.02-.05-.05-.07-.07-.26-.24-.51-.5-.75-.76-2.26-2.49-3.65-5.87-3.65-9.7s1.52-7.5,3.99-10.01l.02.03c2.42-2.42,5.68-3.91,9.76-3.98,3.78.06,6.97,1.38,9.34,3.52.02.02.05.04.07.07.26.24.51.5.75.77,2.26,2.49,3.65,5.87,3.65,9.7s-1.52,7.5-3.99,10.01Z"/>
+            <path fill="#09090a" d="M296.14,15.27c-3.65-2.54-8.06-4.07-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14,0-.2.01-.13,0-.25-.01-.38-.01-13.02,0-23.57,10.47-23.57,23.41s10.19,23.1,22.9,23.46c.22,0,.44.03.66.03.07,0,.14,0,.2-.01.13,0,.25.01.38.01,5.03,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07v2.72ZM292.15,44.53l-.02-.03c-2.42,2.42-5.68,3.91-9.76,3.98-3.78-.06-6.97-1.38-9.34-3.52-.02-.02-.05-.05-.07-.07-.26-.24-.51-.5-.75-.76-2.26-2.49-3.65-5.87-3.65-9.7s1.52-7.5,3.99-10.01l.02.03c2.42-2.42,5.68-3.91,9.76-3.98,3.78.06,6.97,1.38,9.34,3.52.02.02.05.04.07.07.26.24.51.5.75.77,2.26,2.49,3.65,5.87,3.65,9.7s-1.52,7.5-3.99,10.01Z"/>
+            <path fill="#09090a" d="M160.55,11.03c-.13,0-.25,0-.38.01-.07,0-.14-.01-.2-.01-.22,0-.44.03-.66.03-4.77.13-9.18,1.67-12.83,4.2V.04h-10.07v56.62h10.07v-2.95c3.83,2.66,8.48,4.23,13.5,4.23.13,0,.25,0,.38-.01.07,0,.14.01.2.01.22,0,.44-.03.66-.03,12.71-.36,22.9-10.66,22.9-23.46s-10.55-23.41-23.57-23.41ZM170.41,44.14c-.24.26-.49.52-.75.76-.02.02-.05.05-.07.07-2.36,2.14-5.56,3.46-9.34,3.52-4.09-.07-7.35-1.57-9.76-3.98l-.02.03c-2.47-2.51-3.99-6.03-3.99-10.01s1.39-7.21,3.65-9.7c.24-.26.49-.52.75-.77.02-.02.05-.04.07-.07,2.36-2.14,5.56-3.46,9.34-3.52,4.09.07,7.35,1.57,9.76,3.98l.02-.03c2.47,2.51,3.99,6.03,3.99,10.01s-1.39,7.21-3.65,9.7Z"/>
+            <path fill="#09090a" d="M193.9,10.04c2.77,0,4.99-2.28,4.99-5.06s-2.22-4.99-4.99-4.99-5.06,2.22-5.06,4.99,2.29,5.06,5.06,5.06Z"/>
+            <rect fill="#09090a" x="313.02" y="12.55" width="10.07" height="44.11"/>
+            <path fill="#09090a" d="M318.05,10.04c2.77,0,4.99-2.28,4.99-5.06s-2.22-4.99-4.99-4.99-5.06,2.22-5.06,4.99,2.29,5.06,5.06,5.06Z"/>
+            <path fill="#09090a" d="M248.17,51.68c0-2.77,2.29-4.99,5.06-4.99s4.99,2.22,4.99,4.99-2.22,5.06-4.99,5.06-5.06-2.28-5.06-5.06Z"/>
+            <path fill="#3f1993" d="M37.66,12.55v2.72c-3.66-2.53-8.07-4.06-12.83-4.2-.22-.01-.44-.03-.66-.03-.07,0-.14.01-.2.01-.14-.01-.26-.01-.38-.01C10.55,11.03,0,21.5,0,34.44s10.18,23.1,22.9,23.46c.23,0,.44.03.67.03.07,0,.14-.01.2-.01.12,0,.25.01.38.01,5.02,0,9.68-1.57,13.5-4.23v2.95h10.07V12.55h-10.07ZM32.26,23.23c.32.24.63.49.93.76l.07.07c.26.25.51.5.76.77,1.92,2.13,3.23,4.9,3.55,8.06-6.63-.22-11.97-5.6-12.12-12.26,1.39.14,2.73.46,3.96,1,.66.27,1.27.58,1.84.93.35.2.68.43,1.01.68ZM14.07,24.43l.02.02c.72-.72,1.51-1.36,2.38-1.9.23-.14.46-.27.7-.4.68-.37,1.42-.67,2.19-.92.93-.3,1.9-.51,2.91-.61-.14,6.65-5.49,12.05-12.12,12.26.34-3.35,1.77-6.28,3.92-8.45ZM18.68,47.51l-.58-.24c-.58-.26-1.13-.54-1.64-.86-.69-.43-1.32-.91-1.92-1.45l-.07-.07c-.27-.24-.52-.5-.76-.76-1.94-2.13-3.23-4.92-3.55-8.08,6.65.2,11.99,5.64,12.12,12.32-1.28-.15-2.49-.44-3.6-.87ZM33.67,44.54l-.02-.03c-.91.91-1.94,1.69-3.08,2.31-.29.16-.6.3-.91.45-.29.13-.59.25-.89.37-1.03.37-2.14.63-3.32.76.1-6.69,5.47-12.12,12.13-12.32-.34,3.35-1.78,6.29-3.92,8.48Z"/>
+          </g>
+        </svg>
+        <p>The AI operating layer for Arabic-first enterprises. 700+ clients. 8 markets. One suite.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="index.html#assistants">Assistants</a>
+        <a href="translate.html">Translate</a>
+        <a href="ocr.html">OCR</a>
+        <a href="speech.html">Speech</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html">About</a>
+        <a href="#">Security</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:Contact.us@arabic.ai">Contact.us@arabic.ai</a>
+        <a href="mailto:Partners@arabic.ai">Partners@arabic.ai</a>
+        <a href="#">Dubai &middot; Riyadh</a>
+        <a href="#">Amman &middot; Doha</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Arabic.AI &middot; formerly Tarjama</span>
+      <span>Built in the GCC.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Scroll reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* =========== Widget state machine =========== */
+  const widget = document.getElementById('widget');
+  const stepper = document.getElementById('stepper');
+  const steps = stepper.querySelectorAll('.step');
+  const docCards = document.querySelectorAll('.doc-card');
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const templateRows = document.querySelectorAll('.template-row');
+  const briefInput = document.getElementById('briefInput');
+  const briefInputWrap = document.getElementById('briefInputWrap');
+  const continueBrief = document.getElementById('continueBrief');
+  const continueQA = document.getElementById('continueQA');
+
+  const qaCards = document.querySelectorAll('.qa-card');
+
+  function setStep(stepId) {
+    widget.setAttribute('data-step', stepId);
+    const order = ['brief', 'qa', 'writing', 'preview'];
+    const idx = order.indexOf(stepId);
+    const stepperOrder = { brief: 0, qa: 1, writing: 2, preview: 2 };
+    const stepperIdx = stepperOrder[stepId];
+    steps.forEach((s, i) => {
+      s.classList.remove('current', 'done');
+      if (i < stepperIdx) s.classList.add('done');
+      else if (i === stepperIdx) s.classList.add('current');
+    });
+  }
+
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function clearDocHover() {
+    docCards.forEach(c => c.classList.remove('hover'));
+  }
+  function clearDocSelected() {
+    docCards.forEach(c => c.classList.remove('selected'));
+  }
+  function clearLangSelected() {
+    langBtns.forEach(b => b.classList.remove('selected'));
+  }
+  function clearTemplateHover() {
+    templateRows.forEach(r => r.classList.remove('hover'));
+  }
+  function clearQA() {
+    qaCards.forEach(c => {
+      c.classList.remove('in', 'typing', 'answered');
+      const inp = c.querySelector('.qa-input');
+      inp.textContent = '';
+      inp.classList.add('empty');
+      const placeholder = inp.dataset.placeholder;
+      inp.textContent = placeholder;
+      c.querySelectorAll('.qa-suggestion').forEach(s => s.classList.remove('chosen'));
+    });
+  }
+
+  async function typeText(el, text, delay) {
+    el.classList.remove('empty');
+    el.textContent = '';
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    el.appendChild(caret);
+    for (let i = 0; i < text.length; i++) {
+      caret.before(document.createTextNode(text[i]));
+      await wait(delay + Math.random() * 20);
+    }
+  }
+
+  async function runLoop() {
+    while (true) {
+
+      /* ===== STEP 1: BRIEF ===== */
+      setStep('brief');
+
+      /* Reset brief state */
+      clearDocHover();
+      clearDocSelected();
+      clearLangSelected();
+      clearTemplateHover();
+      templateRows.forEach(r => r.classList.remove('chosen'));
+      briefInput.textContent = briefInput.dataset.placeholder;
+      briefInput.classList.add('empty');
+      briefInputWrap.classList.remove('filled');
+      widget.classList.remove('brief-typing');
+      continueBrief.setAttribute('data-state', 'disabled');
+      continueBrief.classList.remove('pulse');
+
+      await wait(1200);
+
+      /* Hover sequence on doc types */
+      const hoverOrder = ['service', 'mou', 'offer'];
+      for (const doc of hoverOrder) {
+        clearDocHover();
+        const card = document.querySelector(`.doc-card[data-doc="${doc}"]`);
+        if (card) card.classList.add('hover');
+        await wait(500);
+      }
+      clearDocHover();
+      await wait(200);
+
+      /* Select Employment Contract */
+      const employment = document.querySelector('.doc-card[data-doc="employment"]');
+      employment.classList.add('hover');
+      await wait(250);
+      employment.classList.remove('hover');
+      employment.classList.add('selected');
+      await wait(700);
+
+      /* Select English */
+      const enBtn = document.querySelector('.lang-btn[data-lang="en"]');
+      enBtn.classList.add('selected');
+      await wait(800);
+
+      /* Hover on templates */
+      const t1 = document.querySelector('.template-row[data-template="1"]');
+      const t2 = document.querySelector('.template-row[data-template="2"]');
+      t2.classList.add('hover');
+      await wait(500);
+      t2.classList.remove('hover');
+      t1.classList.add('hover');
+      await wait(600);
+
+      /* Click template 1 — fill brief */
+      t1.classList.remove('hover');
+      t1.classList.add('chosen');
+      await wait(400);
+
+      widget.classList.add('brief-typing');
+      const briefText = "Full-time employment contract for a Senior Software Engineer at Acme Fintech LLC (Dubai). Monthly salary AED 32,000 + housing 6,000 + transport 1,500. 6-month probation, 30 days annual leave, end-of-service per UAE Labour Law, 12-month non-compete in fintech within UAE.";
+      await typeText(briefInput, briefText, 12);
+      widget.classList.remove('brief-typing');
+      briefInputWrap.classList.add('filled');
+      continueBrief.setAttribute('data-state', 'active');
+
+      await wait(800);
+
+      /* Pulse continue, move to step 2 */
+      continueBrief.classList.add('pulse');
+      await wait(700);
+
+      /* ===== STEP 2: SMART Q&A ===== */
+      setStep('qa');
+      clearQA();
+      continueQA.setAttribute('data-state', 'disabled');
+      continueQA.classList.remove('pulse');
+
+      await wait(600);
+
+      /* Reveal questions one by one */
+      for (let i = 0; i < qaCards.length; i++) {
+        await wait(250);
+        qaCards[i].classList.add('in');
+      }
+      await wait(700);
+
+      /* Answer Q1 — type full name */
+      const q1 = qaCards[0];
+      q1.classList.add('typing');
+      const inp1 = q1.querySelector('.qa-input');
+      await typeText(inp1, 'Acme Fintech LLC, License No: 123456, Dubai; Employee: John Doe, Passport: US123456', 14);
+      q1.classList.remove('typing');
+      await wait(300);
+      q1.classList.add('answered');
+      await wait(500);
+
+      /* Answer Q2 — click suggestion */
+      const q2 = qaCards[1];
+      const inp2 = q2.querySelector('.qa-input');
+      const sugg2 = q2.querySelector('.qa-suggestion[data-val="uae"]');
+      sugg2.classList.add('chosen');
+      await wait(350);
+      inp2.classList.remove('empty');
+      inp2.textContent = 'UAE Labour Law (Mainland)';
+      await wait(300);
+      q2.classList.add('answered');
+      await wait(500);
+
+      /* Answer Q3 — click suggestion */
+      const q3 = qaCards[2];
+      const inp3 = q3.querySelector('.qa-input');
+      const sugg3 = q3.querySelector('.qa-suggestion[data-val="review"]');
+      sugg3.classList.add('chosen');
+      await wait(350);
+      inp3.classList.remove('empty');
+      inp3.textContent = 'Formal review at 3 months';
+      await wait(300);
+      q3.classList.add('answered');
+      await wait(500);
+
+      /* Answer Q4 — click suggestion */
+      const q4 = qaCards[3];
+      const inp4 = q4.querySelector('.qa-input');
+      const sugg4 = q4.querySelector('.qa-suggestion[data-val="all"]');
+      sugg4.classList.add('chosen');
+      await wait(350);
+      inp4.classList.remove('empty');
+      inp4.textContent = 'All fintech companies in UAE';
+      await wait(300);
+      q4.classList.add('answered');
+      await wait(600);
+
+      /* Enable + pulse continue */
+      continueQA.setAttribute('data-state', 'active');
+      continueQA.classList.add('pulse');
+      await wait(900);
+
+      /* ===== WRITING ===== */
+      setStep('writing');
+      await wait(2800);
+
+      /* ===== STEP 3: PREVIEW ===== */
+      setStep('preview');
+      await wait(9000);
+    }
+  }
+
+  /* Init */
+  window.addEventListener('load', () => {
+    setStep('brief');
+    runLoop();
+  });
+</script>
+
+</body>
+</html>
